@@ -1,4 +1,4 @@
-console.log('this is loaded');
+console.log('LIRI IS RUNNING');
 
 exports.twitterKeys = {
   consumer_key: 'WL3koNWDA8BK5EnxJIQksxIoW',
