@@ -124,12 +124,13 @@ liriAnswer.prototype.getMyTweets = function(){
 	  if (error) {
 	    console.log("tweets down:" + error);
 	  }else{
-	  	tweets.forEach(function(tweet,index){
-	  		console.log('Tweets# ' + parseInt(index + 1) + ': ' + tweet.text)
-	  	});
+	  	for(var i = tweets.length - 1; i >= 0; i--){
+		  		
+		  		console.log('Tweets# ' + parseInt(i + 1) + ': ' + tweets[i].text)
+		  			}
 	  }
 
-	 console.log("==================")
+	 console.log("======================")
 
 	});
 
@@ -139,6 +140,8 @@ liriAnswer.prototype.liriCommands = function(){
 
 	var inquirer = require('inquirer');
 	var self = this;
+	var searchText = process.argv[2];
+
 	// console.log("self is >>>>", self);
 
 	inquirer.prompt([
@@ -157,10 +160,10 @@ liriAnswer.prototype.liriCommands = function(){
 		    self.getMyTweets();
 		    break;
 		  case "spotify-this-song":
-		    self.spotifyGet('pink floyd learning to fly');
+		    self.spotifyGet(searchText);
 		    break;
 		  case "movie-this":
-		    self.omdbGet("fear and loathing");
+		    self.omdbGet(searchText);
 		    break;
 		  case "do-what-it-says":
 		    self.liriRead();
