@@ -1,5 +1,6 @@
 var spotify = require('spotify');
 var Twitter = require('twitter');
+var fs = require('fs');
 
 // var action = process.argv[2];
 // var value = process.argv.slice(3);
@@ -20,6 +21,7 @@ function liriAnswer(){
 
 liriAnswer.prototype.omdbGet = function(movieName){
 
+	// var movieName = "";
 
 	var request = 'http://www.omdbapi.com/?t='+ movieName +'&plot=full';
 
@@ -27,11 +29,18 @@ liriAnswer.prototype.omdbGet = function(movieName){
 		if(error){
 		  console.log('error:', error); // Print the error if one occurred 
 		}else{
-		  // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-		  // console.log(body); 
-		  var requestObject = JSON.parse(body);
-		  console.log('body:', requestObject.Title , "," , requestObject.imdbRating, "," , requestObject.Year, "," , requestObject.Country, "," , requestObject.Language , "," ,
-		   requestObject.Plot, "," , requestObject.Actors, "," , requestObject.Ratings[1].Source, requestObject.Ratings[1].Value, "," , requestObject.Website); // Print the HTML for the Google homepage. 
+			// console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+			// console.log(body); 
+			var requestObject = JSON.parse(body);
+			console.log('Movie Title: ', requestObject.Title );
+			console.log('Movie imdbRating: ', requestObject.imdbRating);
+			console.log('Movie Year: ', requestObject.Year);
+			console.log('Movie Country: ', requestObject.Country);
+			console.log('Movie Language: ', requestObject.Language);
+			console.log('Movie Plot: ', requestObject.Plot);
+			console.log('Movie Actors: ', requestObject.Actors);
+			console.log('Movie RottenTotmatesRating: ', requestObject.Ratings[1].Source, requestObject.Ratings[1].Value);
+			console.log('Movie Url: ', requestObject.Website); 
 		}
 	});
 
@@ -55,10 +64,14 @@ liriAnswer.prototype.spotifyGet = function(input){
 	        return;
 	    }else{
 
-	    	console.log(data);
+	    	// console.log(data);
 	    	var track = data.tracks.items;
 
-			console.log(data.tracks.items);
+			// console.log(data.tracks.items[0]);
+			console.log('      Artist: ' + track['0'].artists['0'].name);
+			console.log('The song\'s Name: ' + track['0'].name);
+			console.log('   Spotify Link: ' + track['0'].preview_url);
+			console.log('          Album: ' + track['0'].album.name + '\n');
 
 	    }
 	 
@@ -69,17 +82,19 @@ liriAnswer.prototype.spotifyGet = function(input){
 liriAnswer.prototype.liriRead = function(){
 
 		var fileName = "random.txt";
-		fs.readfile(fileName, "utf8", function(err, data){
+
+		fs.readFile(fileName, "utf8", function(err, data){
 			if(err){
 				console.log(err);
 				return
 			}
-
-			var newParams = data.split(",");
-			console.log(newParams);
-		});
+		var newParams = data.split(",");
+		console.log(newParams);
 
 		liriAnswer(newParams[0], newParams[1].split(" "));
+		
+		});
+		
 
 };
 
@@ -123,12 +138,14 @@ liriAnswer.prototype.getMyTweets = function(){
 liriAnswer.prototype.liriCommands = function(){
 
 	var inquirer = require('inquirer');
+	var self = this;
+	// console.log("self is >>>>", self);
 
 	inquirer.prompt([
 		{
 			type: 'list',
 			name: 'liri',
-			message: 'Hello!',
+			message: 'Hello, Guillermo!',
 			choices: this.commands
 		}
 			
@@ -137,16 +154,16 @@ liriAnswer.prototype.liriCommands = function(){
 
 	switch (action.liri) {
 		  case "my-tweets":
-		    helloliri.getMyTweets();
+		    self.getMyTweets();
 		    break;
 		  case "spotify-this-song":
-		    helloliri.spotifyGet();
+		    self.spotifyGet('pink floyd learning to fly');
 		    break;
 		  case "movie-this":
-		    helloliri.omdbGet();
+		    self.omdbGet("fear and loathing");
 		    break;
 		  case "do-what-it-says":
-		    helloliri.liriRead();
+		    self.liriRead();
 		    break;
 		}
 	});
@@ -162,12 +179,12 @@ liriAnswer.prototype.liriCommands = function(){
 var helloLiri = new liriAnswer();
 
 
-
+// helloLiri.liriRead();
 
 helloLiri.liriCommands();
 
 // helloLiri.getMyTweets();
 
-// helloLiri.spotifyGet('Pink Flyod');
+// helloLiri.spotifyGet('pink floyd learning to fly');
 
 // helloLiri.omdbGet("fear and loathing");
