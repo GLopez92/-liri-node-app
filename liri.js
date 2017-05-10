@@ -53,7 +53,7 @@ liriAnswer.prototype.omdbGet = function(movieName){
 
 
 liriAnswer.prototype.spotifyGet = function(input){
-	// so your're already requiring in the spotify library up in your `liriAnswer` function.
+	// so you're already requiring in the spotify library up in your `liriAnswer` function.
 	// I'd suggest just doing it there and then accessing it as `this.spotify`
 	var spotify = require('spotify');
 
